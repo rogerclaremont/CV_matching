@@ -1,10 +1,17 @@
 import re
 
-def clean_text(text, stopwords):
+def clean_text(text, stopword_paths):
 	"""
-	Rensar textsträngen "text" på stop-ord (givna i listan "stopwords"), samt allt utom bokstäver,
-	och gör om versaler till gemener.
+	Rensar textsträngen "text" på allt utom bokstäver och alla stop-ord givna i textfilen/textfiler 
+	givna i listan "stopword_paths", samt gör om versaler till gemener.
+	TODO - separera engelska och svenska
 	"""
+	stopwords = []
+	for stop_path in stopword_paths:
+		text_file = open(stop_path, 'r')
+		stpwrds = text_file.read().splitlines()
+		stopwords += stpwrds
+		text_file.close()
 	only_letters = re.sub('[^a-zA-ZåäöÅÄÖ]', ' ', text)
 	words = only_letters.lower().split()
 	useful_words = [x for x in words if not x in stopwords]
@@ -15,7 +22,7 @@ def clean_text(text, stopwords):
 def read_mail_data(raw_data):
 	"""
 	Läser in text filen "raw_data" innehållande flera mail-dokument vilka separeras och
-	retuneras som en lista med python dicts med formatet:
+	returneras som en lista med Python-dicts med formatet:
 	mail_dict =	{
 		"sender": "avsändarens epost-adress",
 		"time": "datum och tid",
@@ -62,14 +69,8 @@ def read_mail_data(raw_data):
 
 
 if __name__ == "__main__":
-	text_file = open('./data/stopwords.txt', 'r')
-	stopwords_en = text_file.read().splitlines()
-	text_file.close()
-	text_file = open('./data/stoppord.txt', 'r')
-	stopwords_sv = text_file.read().splitlines()
-	text_file.close()
-	stopwords = stopwords_en + stopwords_sv
 	mails = read_mail_data('./data/job_ad_mails.txt')
 	print(mails[99]['message'])
 	print()
-	print(clean_text(mails[99]['message'], stopwords))
+	stopword_paths = ['./data/stopwords.txt', './data/stoppord.txt']
+	print(clean_text(mails[99]['message'], stopword_paths))
