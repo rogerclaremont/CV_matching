@@ -1,6 +1,3 @@
-word
-aderton
-adertonde
 adjö
 aldrig
 all
@@ -335,6 +332,7 @@ sämre
 sämst
 sätt
 så
+söker
 ta
 tack
 tar

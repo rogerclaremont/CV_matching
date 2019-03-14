@@ -1,5 +1,31 @@
 import re
 
+def lemmatization(text):
+	"""
+	TODO - in both swedish and english
+	
+	Example:
+	>>> import spacy
+	>>> from spacy.lang.sv import Swedish
+	>>> nlp = Swedish()
+	>>> nlp = spacy.blank('sv')
+	>>> doc = nlp("test tests testare testares testas testet")
+	>>> doc
+	test tests testare testares testas testet
+	>>> doc[0].lemma_
+	'testa'
+	>>> doc[1].lemma_
+	'test'
+	>>> doc[2].lemma_
+	'testare'
+	>>> doc[3].lemma_
+	'testares'
+	>>> doc[4].lemma_
+	'testa'
+	>>> doc[5].lemma_
+	'test'
+	"""
+
 def clean_text(text, stopword_paths):
 	"""
 	Rensar textsträngen "text" på allt utom bokstäver och alla stop-ord givna i textfilen/textfiler 
