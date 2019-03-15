@@ -1,4 +1,5 @@
 import re
+import docx
 
 def lemmatization(text):
 	"""
@@ -44,6 +45,15 @@ def clean_text(text, stopword_paths):
 	useful_words_string = ' '.join(useful_words)
 	return useful_words_string
 
+def read_word_file(word_file):
+	"""
+	Läser in en word filen "word_file" och retunerar innhehållet som en sträng.
+	"""
+	doc = docx.Document(word_file)
+	fullText = []
+	for para in doc.paragraphs:
+		fullText.append(para.text)
+	return '\n'.join(fullText)
 
 def read_mail_data(raw_data):
 	"""
@@ -98,5 +108,5 @@ if __name__ == "__main__":
 	mails = read_mail_data('./data/job_ad_mails.txt')
 	print(mails[99]['message'])
 	print()
-	stopword_paths = ['./data/stopwords.txt', './data/stoppord.txt']
+	stopword_paths = ['./data/stopwords_en.txt', './data/stopwords_sv.txt']
 	print(clean_text(mails[99]['message'], stopword_paths))
