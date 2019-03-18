@@ -1,31 +1,17 @@
 import re
 import docx
+import spacy
+from spacy.lang.sv import Swedish
 
-def lemmatization(text):
+def lemmatization_sv(text):
 	"""
-	TODO - in both swedish and english
-	
-	Example:
-	>>> import spacy
-	>>> from spacy.lang.sv import Swedish
-	>>> nlp = Swedish()
-	>>> nlp = spacy.blank('sv')
-	>>> doc = nlp("test tests testare testares testas testet")
-	>>> doc
-	test tests testare testares testas testet
-	>>> doc[0].lemma_
-	'testa'
-	>>> doc[1].lemma_
-	'test'
-	>>> doc[2].lemma_
-	'testare'
-	>>> doc[3].lemma_
-	'testares'
-	>>> doc[4].lemma_
-	'testa'
-	>>> doc[5].lemma_
-	'test'
+	Returnerar en lista med orden i givna strängen i grundform.
 	"""
+	nlp = Swedish()
+	tokenized = nlp(text)
+	lemmalized = [token.lemma_ for token in tokenized]
+	lemmalized_words_string = ' '.join(lemmalized)
+	return lemmalized_words_string
 
 def clean_text(text, stopword_paths):
 	"""
@@ -68,12 +54,12 @@ def read_mail_data(raw_data):
 		}
 	"""
 	
-	# Läs in epost-dataset utan föregående och efterliggande "whitespaces"
+	# Läs in e-post-dataset utan föregående och efterliggande "whitespaces"
 	with open(raw_data) as f:
 		content = f.readlines()
 	content = [x.strip() for x in content]
 	
-	# Dela upp alla mail med hjälp av "Från:-taggen" (skippa första "Från:-taggen"), ta bort alla tomma rader
+	# Dela upp all e-post med hjälp av "Från:-taggen" (skippa första "Från:-taggen"), ta bort alla tomma rader
 	mail_lists = []
 	mail = []
 	words = content[0].split()
@@ -87,7 +73,7 @@ def read_mail_data(raw_data):
 			mail = []
 		mail.append(' '.join(words))
 		
-	# Skapa en dict för varje mail och spara i en lista med dicts
+	# Skapa en dict för varje e-post och spara i en lista med dicts
 	mail_dicts = []
 	mail_dict =	{}
 	for mail_list in mail_lists:

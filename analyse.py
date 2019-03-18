@@ -7,8 +7,31 @@ import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 import matplotlib.cm as cm
 import numpy as np
+import collections
 
 
+def plot_most_common_words(cv_path, stopwords):
+	# Läser in word filer
+	cv_list = []
+	for subdir, dirs, files in os.walk(cv_path):
+		for file in files:
+			cv_filepath = subdir + os.sep + file
+			cleaned_cv = pp.clean_text(pp.read_word_file(cv_filepath), stopwords)
+			#lemmalized = pp.lemmatization_sv(cleaned_cv)
+			#cv_list.append(lemmalized)
+			cv_list.append(cleaned_cv)
+	
+	wordcount = {}
+	for cv in cv_list:
+		for word in cv.split():
+			if word not in wordcount:
+				wordcount[word] = 1
+			else:
+				wordcount[word] += 1
+	
+	word_counter = collections.Counter(wordcount)
+	for word, count in word_counter.most_common(100):
+		print(word, ": ", count)
 
 def plot_cvs(cv_path, stopwords):
 	"""
@@ -29,6 +52,8 @@ def plot_cvs(cv_path, stopwords):
 			if dir_path != subdir:
 				lbl_cntr += 1
 			cleaned_cv = pp.clean_text(pp.read_word_file(cv_filepath), stopwords)
+			#lemmalized = pp.lemmatization_sv(cleaned_cv)
+			#cv_list.append(lemmalized)
 			cv_list.append(cleaned_cv)
 			lbl_indx.append(lbl_cntr)
 			dir_path = subdir
@@ -74,8 +99,9 @@ def plot_cvs(cv_path, stopwords):
 
 
 if __name__ == "__main__":
-	plot_cvs('./data/CVs/Svenska', ['./data/stopwords_sv.txt'])
-
+	plot_cvs('./data/CVs/Svenska', ['./data/stopwords_sv.txt', './data/remove_words.txt'])
+	#plot_most_common_words('./data/CVs/Svenska', ['./data/stopwords_sv.txt', './data/remove_words.txt'])
+	#print(pp.lemmatization_sv('test tests testas testades testade testet'))
 
 
 #print(pp.read_word_file('./data/CVs/CIM/Svenska/CV_Claremont_Roger_Kalliomäki.docx'))
